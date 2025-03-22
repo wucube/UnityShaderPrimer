@@ -33,13 +33,13 @@ Shader "Unity Shaders Book/Chapter_5.2.3/Simple Shader"
             // 顶点着色器的输出结构必须包含一个变量，并且语义为 SV_POSITION，否则渲染器无法得到裁剪空间中的顶点坐标，也就无法将顶点渲染到屏幕上。
             struct v2f
             {
-                // SV_POSITION 告诉 Unity pos 包含了顶点在裁剪空间中的位置信息
+                // SV_POSITION 告诉 Unity pos 包含顶点在裁剪空间中的位置信息
                 float4 pos : SV_POSITION;
                 // COLOR0 语义用于存储颜色信息
                 fixed3 color : COLOR0;
             };
 
-            v2f vert(a2v v) : SV_POSITION
+            v2f vert(a2v v)
             {
                 //声明输出结构
                 v2f o;
