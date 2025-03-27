@@ -13,6 +13,7 @@ Shader "Unity Shaders Book/Chapter_5.2.4/Simple Shader"
         Pass
         {
             CGPROGRAM
+            #include "UnityCG.cginc"
             #pragma vertex vert
             #pragma fragment frag
 
@@ -45,7 +46,7 @@ Shader "Unity Shaders Book/Chapter_5.2.4/Simple Shader"
                 return o;
             }
 
-            float frag(v2f i) : SV_Target
+            fixed4 frag(v2f i) : SV_Target
             {
                 fixed3 c = i.color;
                 // 使用 _Color 属性控制输出颜色

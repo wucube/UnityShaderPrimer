@@ -53,7 +53,7 @@ Shader "Unity Shaders Book/Chapter_5.2.3/Simple Shader"
                 return o;
             }
 
-            float frag(v2f i) : SV_Target
+            fixed4 frag(v2f i) : SV_Target
             {
                 //将插值后的 i.color 显示到屏幕上
                 return fixed4(i.color, 1.0);

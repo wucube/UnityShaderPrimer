@@ -32,7 +32,7 @@ Shader "Unity Shaders Book/Chapter_5.2.2/Simple Shader"
                 return UnityObjectToClipPos(v.vertex);
             }
 
-            float frag() : SV_Target
+            fixed4 frag() : SV_Target
             {
                 return fixed4(1.0, 1.0, 1.0, 1.0);
             }
