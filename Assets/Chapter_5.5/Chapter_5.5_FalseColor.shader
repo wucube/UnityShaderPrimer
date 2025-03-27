@@ -1,7 +1,5 @@
 // Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
 
-// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
-
 Shader "Unity Shaders Book/Chapter_5.5/False Color"
 {
     SubShader
@@ -10,7 +8,9 @@ Shader "Unity Shaders Book/Chapter_5.5/False Color"
         {
             CGPROGRAM
             #pragma vertex vert
-            #pragma fragmetn frag
+            #pragma fragment frag
+
+            #include "UnityCG.cginc"
 
             struct v2f
             {
@@ -38,14 +38,14 @@ Shader "Unity Shaders Book/Chapter_5.5/False Color"
 
                 //可视化第一组纹理坐标的小数部分
                 o.color = frac(v.texcoord);
-                if(any(saturate(v.texcoord)-v.texcoord))
+                if(any(saturate(v.texcoord) - v.texcoord))
                 {
                     o.color.b = 0.5;
                 }
                 o.color.a = 1.0;
 
                 o.color = frac(v.texcoord1);
-                if(any(saturate(v.texcoord1)) - v.texcoord1)
+                if(any(saturate(v.texcoord1) - v.texcoord1))
                 {
                     o.color.b = 0.5;
                 }
@@ -56,7 +56,7 @@ Shader "Unity Shaders Book/Chapter_5.5/False Color"
 
                 return o;
             }
-            
+
             fixed4 frag(v2f i) : SV_Target{
                 return i.color;
             }
