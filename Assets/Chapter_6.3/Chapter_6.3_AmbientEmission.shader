@@ -1,4 +1,4 @@
-Shader "Unity Shaders Book/Chapter_6.3_AmbientEmission"
+Shader "Unity Shaders Book/Chapter_6.3/AmbientEmission"
 {
     Properties
     {
