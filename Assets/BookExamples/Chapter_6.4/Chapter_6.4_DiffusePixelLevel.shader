@@ -1,6 +1,6 @@
 // Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
 
-Shader "Unity Shaders Book/Chapter_6.4/Half Lambert"
+Shader"Book Examples/Chapter_6.4/Diffuse Pixel-Level"
 {
     Properties
     {
@@ -42,14 +42,15 @@ Shader "Unity Shaders Book/Chapter_6.4/Half Lambert"
 
             fixed4 frag(v2f i) : SV_Target{
                 fixed3 ambient = UNITY_LIGHTMODEL_AMBIENT.xyz;
+
                 fixed3 world_normal = normalize(i.worldNormal);
+
                 fixed3 world_light = normalize(_WorldSpaceLightPos0.xyz);
 
-                fixed3 half_lambert = dot(world_normal,world_light) * 0.5 + 0.5;
-                fixed3 diffuse = _LightColor0.rgb * _Diffuse.rgb * half_lambert;
-                
+                fixed3 diffuse= _LightColor0.rgb * _Diffuse.rgb * saturate(dot(world_normal,world_light));
+
                 fixed3 color = ambient + diffuse;
-                
+
                 return fixed4(color, 1.0);
             }
             
