@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: BlinnPhongMat
-  m_Shader: {fileID: 4800000, guid: 1d10c23965ca99b499f4c9bf4802e99a, type: 3}
+  m_Name: '[ReImp]BlinnPhongMat'
+  m_Shader: {fileID: 4800000, guid: 64da46efa69bbd746bbdecc6cafc21b7, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
@@ -62,7 +62,7 @@ Material:
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
-    - _Gloss: 8
+    - _Gloss: 20
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1

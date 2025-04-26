@@ -1,4 +1,4 @@
-Shader "Book Examples/Chapter_6.5/BlinnPhong"
+Shader "Book Examples/Chapter_6.5/Specular Pixel-Level"
 {
     Properties
     {
@@ -56,10 +56,11 @@ Shader "Book Examples/Chapter_6.5/BlinnPhong"
                 fixed3 worldNormal = normalize(i.world_normal);
                 fixed3 worldLightDir = normalize(_WorldSpaceLightPos0.xyz);
                 fixed3 diffuse = _LightColor0.rgb * _Diffuse.rgb * saturate(dot(worldNormal,worldLightDir));
-                
-                fixed3 viewDir = normalize(_WorldSpaceCameraPos.xyz - i.world_pos.xyz);
-                fixed3 halfDir = normalize(worldLightDir + viewDir);
-                fixed3 specular = _LightColor0.rgb * _Specular.rgb * pow(max(0, dot(worldNormal,halfDir)),_Gloss);
+
+                fixed3 world_relect_dir = normalize(reflect(-worldLightDir,worldNormal));
+                fixed3 worldPos = normalize(i.world_pos);
+                fixed3 world_view_dir = normalize(_WorldSpaceCameraPos.xyz - worldPos.xyz);
+                fixed3 specular = _LightColor0.rgb * _Specular.rgb * pow(saturate(dot(world_relect_dir,world_view_dir)),_Gloss);
                 
                 return fixed4(specular+diffuse+ambient,1.0);
             }

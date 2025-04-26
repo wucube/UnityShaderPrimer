@@ -1,4 +1,4 @@
-Shader "Book Reimplementations/Chapter_6.4/Diffuse_HalfLambert_Pixel"
+Shader "Book Reimplementations/Chapter_6.4/Diffuse Pixel-Level_HalfLambert"
 {
     Properties
     {
