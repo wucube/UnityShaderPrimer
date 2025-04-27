@@ -1,4 +1,4 @@
-Shader "Book Examples/Chapter_6.5/BlinnPhong"
+Shader "Book Examples/Chapter_6.6/BlinnPhongUseBuildInFunction"
 {
     Properties
     {
@@ -44,7 +44,7 @@ Shader "Book Examples/Chapter_6.5/BlinnPhong"
             {
                 v2f o;
                 o.pos = UnityObjectToClipPos(v.vertex);
-                o.world_normal = UnityObjectToWorldNormal(v.normal); //mul(v.normal,(float3x3)unity_WorldToObject);
+                o.world_normal = mul(v.normal,(float3x3)unity_WorldToObject);
                 o.world_pos = mul(unity_ObjectToWorld,v.vertex).xyz;
                 return o;
             }
@@ -54,10 +54,10 @@ Shader "Book Examples/Chapter_6.5/BlinnPhong"
                 fixed3 ambient = UNITY_LIGHTMODEL_AMBIENT.xyz;
 
                 fixed3 worldNormal = normalize(i.world_normal);
-                fixed3 worldLightDir = normalize(UnityWorldSpaceLightDir(i.world_pos));//normalize(_WorldSpaceLightPos0.xyz);
+                fixed3 worldLightDir = normalize(_WorldSpaceLightPos0.xyz);
                 fixed3 diffuse = _LightColor0.rgb * _Diffuse.rgb * saturate(dot(worldNormal,worldLightDir));
-
-                fixed3 viewDir = normalize(UnityWorldSpaceViewDir(i.world_pos));//normalize(_WorldSpaceCameraPos.xyz - i.world_pos.xyz);
+                
+                fixed3 viewDir = normalize(_WorldSpaceCameraPos.xyz - i.world_pos.xyz);
                 fixed3 halfDir = normalize(worldLightDir + viewDir);
                 fixed3 specular = _LightColor0.rgb * _Specular.rgb * pow(saturate(dot(worldNormal,halfDir)),_Gloss);
                 
