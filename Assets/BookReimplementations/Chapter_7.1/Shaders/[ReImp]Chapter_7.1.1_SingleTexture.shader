@@ -1,11 +1,13 @@
-Shader "Book Examples/Chapter_7.1.1/Single Texture"
+// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
+Shader "Book Reimplementations/Chapter_7.1.1/Single Texture"
 {
     Properties
     {
-        _Color("Color Tint",Color) = (1,1,1,1)
-        _MainTex("Main Tex",2D) = "white"{}
-        _Specular("Specular",Color) = (1,1,1,1)
-        _Gloss("Gloss",Range(8.0,256)) = 20
+        _Color("Color Tint", Color) = (1,1,1,1)
+        _MainTex("Main Tex", 2D) = "white" { }
+        _Specular("Specular", Color) = (1,1,1,1)
+        _Gloss("Gloss",Range(8.0,256)) =  20
     }
     
     SubShader
@@ -16,11 +18,11 @@ Shader "Book Examples/Chapter_7.1.1/Single Texture"
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
-            #include  "Lighting.cginc"
-
+            #include "Lighting.cginc"
+            
             fixed4 _Color;
             sampler2D _MainTex;
-            float4 _MainTex_ST;
+            float4 _MainTex_ST;//纹理的缩放和平移值
             fixed4 _Specular;
             float _Gloss;
 
@@ -44,8 +46,9 @@ Shader "Book Examples/Chapter_7.1.1/Single Texture"
                 v2f o;
                 o.pos = UnityObjectToClipPos(v.vertex);
                 o.worldNormal = UnityObjectToWorldNormal(v.normal);
-                o.worldPos = mul(unity_ObjectToWorld,v.vertex).xyz;
-                o.uv = v.texcoord.xy * _MainTex_ST.xy  + _MainTex_ST.zw;
+                o.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
+                o.uv = v.texcoord.xy * _MainTex_ST.xy + _MainTex_ST.zw;//先缩放顶点纹理坐标，再偏移顶点纹理坐标
+                //o.uv = TRANSFORM_TEX(v.texcoord, _MainTex); Or just call the built-in funciton
                 return o;
             }
 
@@ -53,18 +56,19 @@ Shader "Book Examples/Chapter_7.1.1/Single Texture"
             {
                 fixed3 worldNormal = normalize(i.worldNormal);
                 fixed3 worldLightDir = normalize(UnityWorldSpaceLightDir(i.worldPos));
-                
+                // Use the texture to sample diffuse color
+                // tex2D 返回被采样纹理的纹素值
                 fixed3 albedo = tex2D(_MainTex, i.uv).rgb * _Color.rgb;
 
                 fixed3 ambient = UNITY_LIGHTMODEL_AMBIENT.xyz * albedo;
+                
+                fixed3 diffuse = _LightColor0.rgb * albedo * max(0,dot(worldNormal,worldLightDir));
 
-                fixed3 diffuse = _LightColor0.rgb * albedo * saturate(dot(worldNormal, worldLightDir));
+                fixed3 viweDir = normalize(UnityWorldSpaceViewDir(i.worldPos));
+                fixed3 halfDir = normalize(worldLightDir + viweDir);
+                fixed3 specular = _LightColor0.rgb * _Specular.rgb * pow(max(0, dot(worldNormal,halfDir)),_Gloss);
 
-                fixed3 viewDir = normalize(UnityWorldSpaceViewDir(i.worldPos));
-                fixed3 halfDir = normalize(worldLightDir + viewDir);
-                fixed3 specular = _LightColor0.rgb * _Specular.rgb * pow(saturate(dot(worldNormal,halfDir)),_Gloss);
-
-                return fixed4(ambient + diffuse +specular, 1.0);
+                return fixed4(ambient + diffuse + specular, 1.0);
             }
             ENDCG
         }
