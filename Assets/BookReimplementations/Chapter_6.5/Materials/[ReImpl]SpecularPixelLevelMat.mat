@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: '[ReImp]SpecularVertexLevelMat'
-  m_Shader: {fileID: 4800000, guid: b872f0a6e5d22a24c8b30ae0c39e73ad, type: 3}
+  m_Name: '[ReImpl]SpecularPixelLevelMat'
+  m_Shader: {fileID: 4800000, guid: e90967e622dea4747b96826dc468c79e, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4

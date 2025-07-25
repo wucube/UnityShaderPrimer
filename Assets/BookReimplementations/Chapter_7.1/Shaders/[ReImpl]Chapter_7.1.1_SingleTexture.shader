@@ -1,6 +1,6 @@
 // Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
 
-Shader "Book Reimplementations/Chapter_7.1.1/Single Texture"
+Shader "Book ReImplementations/Chapter_7.1.1/Single Texture"
 {
     Properties
     {

@@ -1,4 +1,4 @@
-Shader "Book Reimplementations/Chapter_6.5/Specular Vertex-Level"
+Shader "Book ReImplementations/Chapter_6.5/Specular Vertex-Level"
 {
     Properties
     {

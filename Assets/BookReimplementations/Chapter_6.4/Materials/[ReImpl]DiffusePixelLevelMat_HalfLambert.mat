@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: '[ReImp]DiffusePixelLevelMat'
-  m_Shader: {fileID: 4800000, guid: 416447113cba0a744b2b6430bf8d2802, type: 3}
+  m_Name: '[ReImpl]DiffusePixelLevelMat_HalfLambert'
+  m_Shader: {fileID: 4800000, guid: f9623cc262684094c8485cc5a78be5ca, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4

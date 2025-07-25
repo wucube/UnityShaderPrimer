@@ -1,4 +1,4 @@
-Shader "Book Reimplementations/Chapter_6.5/Specular Pixel-Level"
+Shader "Book ReImplementations/Chapter_6.5/Specular Pixel-Level"
 {
     Properties
     {

@@ -1,4 +1,4 @@
-Shader "Book Reimplementations/Chapter_6.4/Diffuse Vertex-Level"
+Shader "Book ReImplementations/Chapter_6.4/Diffuse Vertex-Level"
 {
     Properties
     {
