@@ -2,8 +2,8 @@ Shader "Book ReImplementations/Chapter_7.1.1/Single Texture"
 {
     Properties
     {
-        _Color("Color",Color) = (1,1,1,1)
-        _MainTex("Main Tint",2D) = "white" {}
+        _Color("Color Tint",Color) = (1,1,1,1)
+        _MainTex("Main Tex",2D) = "white"{}
         _Specular("Specular",Color) = (1,1,1,1)
         _Gloss("Gloss",Range(8.0,256)) = 20
     }
@@ -12,16 +12,17 @@ Shader "Book ReImplementations/Chapter_7.1.1/Single Texture"
     {
         Pass
         {
-            Tags {"LightMode" = "ForwardBase"}
+            Tags{"LightMode" = "ForwardBase"}
             CGPROGRAM
-            fixed4 _Color;
-            sampler2D _MainTex;
-            fixed4 _MainTex_ST;
-            fixed4 _Specular;
-            float _Gloss;
-            #include "Lighting.cginc"
             #pragma vertex vert
             #pragma fragment frag
+            #include "Lighting.cginc"
+            
+            fixed4 _Color;
+            sampler2D _MainTex;
+            float4 _MainTex_ST;
+            fixed4 _Specular;
+            float _Gloss;
 
             struct a2v
             {
@@ -44,8 +45,7 @@ Shader "Book ReImplementations/Chapter_7.1.1/Single Texture"
                 o.pos = UnityObjectToClipPos(v.vertex);
                 o.worldNormal = UnityObjectToWorldNormal(v.normal);
                 o.worldPos = mul(unity_ObjectToWorld,v.vertex).xyz;
-                //o.uv = v.texcoord.xy * _MainTex_ST.xy + _MainTex_ST.zw;
-                o.uv = TRANSFORM_TEX(v.texcoord,_MainTex);
+                o.uv = v.texcoord.xy * _MainTex_ST.xy + _MainTex_ST.zw;
                 return o;
             }
 
@@ -55,18 +55,20 @@ Shader "Book ReImplementations/Chapter_7.1.1/Single Texture"
                 fixed3 worldLightDir = normalize(UnityWorldSpaceLightDir(i.worldPos));
 
                 fixed3 albedo = tex2D(_MainTex,i.uv).rgb * _Color.rgb;
-                fixed3 ambient  =  UNITY_LIGHTMODEL_AMBIENT.xyz * albedo;
+                fixed3 ambient = UNITY_LIGHTMODEL_AMBIENT.xyz * albedo;
                 fixed3 diffuse = _LightColor0.rgb * albedo * saturate(dot(worldNormal,worldLightDir));
 
                 fixed3 viewDir = normalize(UnityWorldSpaceViewDir(i.worldPos));
-                fixed3 halfDir = normalize(worldLightDir+viewDir);
-                fixed3 specular = _LightColor0.rgb * _Specular.rgb*pow(saturate(dot(worldNormal,halfDir)),_Gloss);
+                fixed3 halfDir = normalize(worldLightDir + viewDir);
 
-                return fixed4(ambient +diffuse+specular,1.0);
+                fixed3 specular = _LightColor0.rgb * _Specular.rgb * pow(saturate(dot(worldNormal,halfDir)),_Gloss);
+
+                return fixed4(ambient+diffuse+specular,1.0);
             }
             
             ENDCG
         }
     }
-    
+
+    Fallback "Specular"
 }
