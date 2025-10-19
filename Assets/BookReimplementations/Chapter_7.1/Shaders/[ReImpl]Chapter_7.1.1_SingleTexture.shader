@@ -20,7 +20,7 @@ Shader "Book ReImplementations/Chapter_7.1.1/Single Texture"
             
             fixed4 _Color;
             sampler2D _MainTex;
-            float4 _MainTex_ST;
+            float4 _MainTex_ST; 
             fixed4 _Specular;
             float _Gloss;
 
