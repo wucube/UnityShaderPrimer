@@ -4,8 +4,10 @@ Shader"Book Examples/Chapter_7.2/Normal Map In Tangent Space"
     {
         _Color ("Color Tint", Color) = (1,1,1,1)
         _MainTex ("Main Tex", 2D) = "white" {}
-        _BumpMap ("Normal Map", 2D) = "bump" {} //没有提供法线纹理时，bump 对应模型自带的法线信息
-        _BumpScale ("Bump Scale", Float) = 1.0  //控制凹凸程度，为0时法线纹理不会影响光照
+        //法线纹理。没有提供法线纹理时，bump 对应模型自带的法线信息
+        _BumpMap ("Normal Map", 2D) = "bump" {}
+        //凹凸程度，为 0 时 表示法线纹理不会影响光照
+        _BumpScale ("Bump Scale", Float) = 1.0
         _Specular ("Specular", Color) = (1,1,1,1)
         _Gloss ("Gloss", Range(8.0, 256)) = 20
     }
@@ -21,9 +23,9 @@ Shader"Book Examples/Chapter_7.2/Normal Map In Tangent Space"
             #include "Lighting.cginc"
             fixed4 _Color;
             sampler2D _MainTex;
-            float4 _MainTex_ST;
+            float4 _MainTex_ST;//纹理属性(缩放、偏移))
             sampler2D _BumpMap;
-            float4 _BumpMap_ST;
+            float4 _BumpMap_ST;//纹理属性(缩放、偏移))
             float _BumpScale;
             fixed4 _Specular;
             float _Gloss;
@@ -32,13 +34,16 @@ Shader"Book Examples/Chapter_7.2/Normal Map In Tangent Space"
             {
                 float4 vertex : POSITION;
                 float3 normal : NORMAL;
-                float4 tangent : TANGENT; // 将顶点的切线方向填充到 tangent 变量中。tangent.w 分量决定切线空间中的副切线方向。  
+                // 将顶点的切线方向填充到 tangent 变量中。tangent.w 分量决定切线空间中的副切线方向。  
+                float4 tangent : TANGENT; 
                 float4 texcoord : TEXCOORD0;
             };
             
             struct v2f
             {
                 float4 pos : SV_POSITION;
+                //xy 分量为主纹理的 uv 坐标
+                //zw 分量为法线纹理的 uv 坐标
                 float4 uv : TEXCOORD0;
                 //存储切线空间下的光照与视角方向
                 float3 lightDir : TEXCOORD1;
@@ -54,8 +59,10 @@ Shader"Book Examples/Chapter_7.2/Normal Map In Tangent Space"
                 o.uv.zw = v.texcoord.xy * _BumpMap_ST.xy + _BumpMap_ST.zw;
 
                 // Compute the binnormal
+                //和切线与法线方向都垂直的方向有两个 ，叉积结果 * tangnet.w 决定选择其中的某个方向。
                 float3 binormal = cross(normalize(v.normal),normalize(v.tangent.xyz)) * v.tangent.w;
                 // Construct a matrix which transform vectors from object space to tangent sapce
+                // 模型空间下切线方向、副切线方向和法线方向按行排列得到从模型空间到切线空间的变换矩阵
                 float3x3 rotation =  float3x3(v.tangent.xyz, binormal,v.normal);
                 
                 //直接使用内置宏得到模型空间到切线空间的变换矩阵

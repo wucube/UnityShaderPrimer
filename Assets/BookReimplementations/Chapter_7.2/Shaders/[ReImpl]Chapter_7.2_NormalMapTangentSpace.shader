@@ -71,7 +71,7 @@ Shader "Book ReImplementations/Chapter_7.2/Normal Map Tangent Space"
 
                 //Transform the light direction from object space to tangent space
                 o.lightDir = mul(rotation,ObjSpaceLightDir(v.vertex)).xyz;
-                //Transform the view direction from object space to tangent sapce
+                c
                 o.viewDir = mul(rotation,ObjSpaceViewDir(v.vertex)).xyz;
 
                 return o;
@@ -86,13 +86,13 @@ Shader "Book ReImplementations/Chapter_7.2/Normal Map Tangent Space"
                 fixed4 packedNormal = tex2D(_BumpMap,i.uv.zw);
                 fixed3 tangentNormal;
                 // If the texture is not marked as "Normal Map"，and disenable sRGB flag
-                tangentNormal.xy = (packedNormal.xy * 2 -1)*_BumpScale;
-                tangentNormal.z = sqrt(1.0 - saturate(dot(tangentNormal.xy,tangentNormal.xy)));
+                // tangentNormal.xy = (packedNormal.xy * 2 -1)*_BumpScale;
+                // tangentNormal.z = sqrt(1.0 - saturate(dot(tangentNormal.xy,tangentNormal.xy)));
 
                 // Or mark the texture as "Normal Map", and use the built-in function
-                // tangentNormal = UnpackNormal(packedNormal);
-                // tangentNormal.xy *= _BumpScale;
-                // tangentNormal.z = sqrt(1.0 - saturate(dot(tangentNormal.xy,tangentNormal.xy)));
+                tangentNormal = UnpackNormal(packedNormal);
+                tangentNormal.xy *= _BumpScale;
+                tangentNormal.z = sqrt(1.0 - saturate(dot(tangentNormal.xy,tangentNormal.xy)));
 
                 fixed3 albedo = tex2D(_MainTex,i.uv).rgb * _Color.rgb;
                 fixed3 ambient = UNITY_LIGHTMODEL_AMBIENT.xyz * albedo;
