@@ -55,7 +55,7 @@ Shader "Book Examples/Chapter_7.1.1/Single Texture"
                 fixed3 worldNormal = normalize(i.worldNormal);
                 fixed3 worldLightDir = normalize(UnityWorldSpaceLightDir(i.worldPos));
                 
-                //纹理采样结果(纹素值)和颜色属性的乘积来作为材质的反射率(albedo)
+                //纹理采样结果(纹素值)和颜色属性的乘积来作为材质的反射率(albedo)。* _Color 用于调节纹理的颜色
                 fixed3 albedo = tex2D(_MainTex, i.uv).rgb * _Color.rgb;
 
                 //环境光照与材质的反射率相乘得到环境光
