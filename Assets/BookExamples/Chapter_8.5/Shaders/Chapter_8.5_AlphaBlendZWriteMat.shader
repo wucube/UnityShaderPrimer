@@ -1,20 +1,33 @@
-Shader "Book Examples/Chapter_8.3/Alpha Test"
+Shader "Book Examples/Chapter_8.5/Alpha Blend ZWrite"
 {
     Properties
     {
         _Color("Main Tint",Color) = (1,1,1,1)
         _MainTex("Main Texture",2D) = "white" {}
-        //调用 clip 函数进行透明度测试时使用的判断条件。
-        _Cutoff("Alpha Cutoff",Range(0,1)) = 0.5
+        //用于在透明纹理的基础上控制整体的透明度
+        _AlphaScale("Alpha Scale",Range(0,1)) = 1
     }
     
     SubShader
     {
-        Tags {"Queue" = "AlphaTest" "IgnoreProjector" = "True" "RenderType" = "TransparentCutout"}
+        Tags {"Queue" = "Transparent" "IgnoreProjector" = "True" "RenderType" = "Transparent"}
+        
+        //Extra pass that renders to depth buffer only
+        //把模型的深度信息写入深度缓冲中，从而剔除模型中被自身遮挡的片元
+        Pass
+        {
+            ZWrite On
+            //ColorMask 设置颜色通道的写掩码。为 0 时，该 Pass 不写入任何颜色通道，即不会输出任何颜色 
+            ColorMask 0
+        }
         
         Pass
         {
             Tags {"LightMode" = "ForwardBase"}
+            
+            ZWrite Off //关闭深度写入
+            Blend SrcAlpha OneMinusSrcAlpha //开启混合模式
+            
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
@@ -23,8 +36,7 @@ Shader "Book Examples/Chapter_8.3/Alpha Test"
             fixed4 _Color;
             sampler2D _MainTex;
             float4 _MainTex_ST;
-            //_Cutoff 范围在 [O, I], 可以 fixed 精度来存储。
-            fixed _Cutoff;
+            fixed _AlphaScale;
 
             struct a2v
             {
@@ -57,23 +69,15 @@ Shader "Book Examples/Chapter_8.3/Alpha Test"
                 fixed3 worldLightDir = normalize(UnityWorldSpaceLightDir(i.worldPos));
 
                 fixed4 texColor = tex2D(_MainTex,i.uv);
-                //texColor.a 小于材质参数 _Cutoff 时，就舍弃该片元的输出，即该片元会产生完全透明的效果。
-                clip(texColor.a - _Cutoff);
-                // Equal to
-                // if (texColor.a - _Cutoff < 0.0)
-                // {
-                //     discard; // discard 指令显式剔除该片元
-                // }
-
                 fixed3 albedo = texColor.rgb * _Color.rgb;
                 fixed3 ambient = UNITY_LIGHTMODEL_AMBIENT.xyz * albedo;
                 fixed3 diffuse = _LightColor0.rgb * albedo * saturate(dot(worldNormal,worldLightDir));
-                return fixed4(ambient + diffuse,1.0);
+                return fixed4(ambient + diffuse,texColor.a * _AlphaScale);
             }
             
             ENDCG
         }
     }
 
-    Fallback "Transparent/Cutout/VertexLit"
+    Fallback "Transparent/VertexLit"
 }

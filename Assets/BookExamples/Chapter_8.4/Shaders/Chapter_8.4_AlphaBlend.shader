@@ -1,4 +1,4 @@
-Shader "Book ReImplementations/Chapter_8.4/Alpha Blend"
+Shader "Book Examples/Chapter_8.4/Alpha Blend"
 {
     Properties
     {
