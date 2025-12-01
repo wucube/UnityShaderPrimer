@@ -9,7 +9,7 @@ Shader "Book ReImplementations/Chapter_8.3/Alpha Test"
     
     SubShader
     {
-        Tags{"Queue" = "AlphaTest" "IgnoreProjector" = "True" "RenderType" = "TransparentCufoff"}
+        Tags{"Queue" = "AlphaTest" "IgnoreProjector" = "True" "RenderType" = "TransparentCutout"}
         
         Pass
         {
