@@ -13,7 +13,7 @@ Shader "Book Examples/Chapter_8.5/Alpha Blend ZWrite"
         Tags {"Queue" = "Transparent" "IgnoreProjector" = "True" "RenderType" = "Transparent"}
         
         //Extra pass that renders to depth buffer only
-        //把模型的深度信息写入深度缓冲中，从而剔除模型中被自身遮挡的片元
+        //把模型的深度信息写入深度缓冲中，从而剔除模型中被自身遮挡的片元（只显示最表层的）
         Pass
         {
             ZWrite On
