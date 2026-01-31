@@ -70,7 +70,6 @@ Shader "Book Examples/Chapter_8.7.2/Alpha Blend Both Sided"
             ENDCG
         }
         
-        
         Pass
         {
             Tags {"LightMode" = "ForwardBase"}
