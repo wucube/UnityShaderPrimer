@@ -157,8 +157,8 @@ Camera:
   m_GameObject: {fileID: 394868858}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0.21960784, g: 0.21960784, b: 0.21960784, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -184,7 +184,7 @@ Camera:
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
   m_TargetEye: 3
-  m_HDR: 1
+  m_HDR: 0
   m_AllowMSAA: 1
   m_AllowDynamicResolution: 0
   m_ForceIntoRT: 0
@@ -234,7 +234,7 @@ Light:
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
-  m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
+  m_Color: {r: 0.8301887, g: 0.8144292, b: 0.7714489, a: 1}
   m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
@@ -310,7 +310,7 @@ PrefabInstance:
     - target: {fileID: 4025754473392273995, guid: 44dce0f9d4a7f164d8e8e3da8988c34f, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 6cd614f751edd4a4ba257b5674d39d5d, type: 2}
+      objectReference: {fileID: 2100000, guid: 71d6b279b1dbfa24bb54b565c2b5c142, type: 2}
     - target: {fileID: 6691243982890836069, guid: 44dce0f9d4a7f164d8e8e3da8988c34f, type: 3}
       propertyPath: m_RootOrder
       value: 2

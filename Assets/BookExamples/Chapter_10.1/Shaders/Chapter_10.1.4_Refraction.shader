@@ -1,14 +1,16 @@
-Shader "Book Examples/Chapter_10.1.3/Reflection"
+Shader "Book Examples/Chapter_10.1.4/Refraction"
 {
     Properties
     {
         _Color("Color Tint",Color) = (1,1,1,1)
-        // 反射颜色
-        _ReflectColor("Reflect Color",Color)  = (1,1,1,1)
-        // 反射程度
-        _ReflectAmount("Reflect Amount",Range(0,1)) = 1
+        // 折射颜色
+        _RefractColor("Refraction Color",Color)  = (1,1,1,1)
+        // 折射程度
+        _RefractAmount("Refraction Amount",Range(0,1)) = 1
+        // 不同介质的折射比
+        _RefractRatio("Refraction Ratio",Range(0.1,1)) = 0.5
         /// 环境映射纹理
-        _Cubemap("Reflection Cubemap",Cube) = "_Skybox" { }
+        _Cubemap("Refraction Cubemap",Cube) = "_Skybox" { }
     }
     
     SubShader
@@ -30,8 +32,9 @@ Shader "Book Examples/Chapter_10.1.3/Reflection"
             #include "AutoLight.cginc"
             
             fixed4 _Color;
-            fixed4 _ReflectColor;
-            fixed _ReflectAmount;
+            fixed4 _RefractColor;
+            fixed _RefractAmount;
+            fixed _RefractRatio;
             samplerCUBE _Cubemap;
 
             struct  a2v
@@ -46,7 +49,7 @@ Shader "Book Examples/Chapter_10.1.3/Reflection"
                 float3 worldPos : TEXCOORD0;
                 fixed3 worldNormal : TEXCOORD1;
                 fixed3 worldViewDir : TEXCOORD2;
-                fixed3 worldReflectDir : TEXCOORD3;
+                fixed3 worldRefractDir : TEXCOORD3;
                 SHADOW_COORDS(4)
             };
             
@@ -57,8 +60,9 @@ Shader "Book Examples/Chapter_10.1.3/Reflection"
                 o.worldNormal = UnityObjectToWorldNormal(v.normal);
                 o.worldPos = mul(unity_ObjectToWorld,v.vertex).xyz;
                 o.worldViewDir = UnityWorldSpaceViewDir(o.worldPos);
-                // Compute the reflect dir in world space
-                o.worldReflectDir = reflect(-o.worldViewDir,o.worldNormal);
+                // Compute the refract dir in world space
+                // _RefractRatio 是入射光线所在介质的折射率和折射光线所在介质的折射率之间的比值
+                o.worldRefractDir = refract(-normalize(o.worldViewDir),normalize(o.worldNormal),_RefractRatio);
                 
                 TRANSFER_SHADOW(o)
                 
@@ -74,14 +78,14 @@ Shader "Book Examples/Chapter_10.1.3/Reflection"
                 fixed3 ambient = UNITY_LIGHTMODEL_AMBIENT.xyz;
                 fixed3 diffuse = _LightColor0.rgb * _Color.rgb * saturate(dot(worldNormal,worldLightDir));
                 
-                // Use the reflect dir in wordld space to access the cubemap
-                // worldReflectDir 仅传递方向用于采样，不必归一化 
-                fixed3 reflection = texCUBE(_Cubemap,i.worldReflectDir).rgb * _ReflectColor.rgb;
+                // Use the refract dir in wordld space to access the cubemap
+                // worldRefractDir 仅传递方向用于采样，不必归一化 
+                fixed3 refraction = texCUBE(_Cubemap,i.worldRefractDir).rgb * _RefractColor.rgb;
                 
                 UNITY_LIGHT_ATTENUATION(atten, i, i.worldPos);
                 
-                // Mix the diffuse with the refected color 
-                fixed3 color = ambient + lerp(diffuse, reflection, _ReflectAmount) * atten;
+                // Mix the diffuse with the refracted color 
+                fixed3 color = ambient + lerp(diffuse, refraction, _RefractAmount) * atten;
                 
                 return fixed4(color, 1.0);
             }
