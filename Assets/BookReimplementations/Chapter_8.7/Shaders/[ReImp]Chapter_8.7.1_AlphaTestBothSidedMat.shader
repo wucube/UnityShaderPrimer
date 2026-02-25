@@ -1,4 +1,4 @@
-Shader " Book ReImplementations/Chapter_8.7.1/Alpha Test Both Sided"
+Shader "Book ReImplementations/Chapter_8.7.1/Alpha Test Both Sided"
 {
     Properties
     {
