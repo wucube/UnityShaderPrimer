@@ -1,4 +1,4 @@
-﻿Shader "Book Examples/Chapter_13_2/MotionBlur With Depth Texture"
+﻿Shader "Book Examples/Chapter_13.2/MotionBlur With Depth Texture"
 {
     Properties
     {

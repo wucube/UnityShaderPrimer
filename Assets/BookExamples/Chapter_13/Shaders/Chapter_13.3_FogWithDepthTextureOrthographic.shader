@@ -1,4 +1,4 @@
-﻿Shader "Book Examples/Chapter_13_3/Fog With Depth Texture Orthographic"
+﻿Shader "Book Examples/Chapter_13.3/Fog With Depth Texture Orthographic"
 {
     Properties
     {
